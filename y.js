@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 var negotiate = function() {
-
+	console.log("hi")
     if (fs.existsSync('../../downloads/video.webm')) {
         //var fs = require('fs'),
         console.log("Point A")
