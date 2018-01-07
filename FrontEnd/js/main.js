@@ -65,9 +65,10 @@ function startRecording(stream) {
 	mediaRecorder.start(10);
  
 	var url = window.URL || window.webkitURL;
-	videoElement.src = url ? url.createObjectURL(stream) : stream;
+	//videoElement.src = url ? url.createObjectURL(stream) : stream;
 	//videoElement.play();
-
+	videoElement.controls = false;
+	
 	mediaRecorder.ondataavailable = function(e) {
 		//log('Data available...');
 		//console.log(e.data);
@@ -91,6 +92,7 @@ function startRecording(stream) {
 		 log('Stopped  & state = ' + mediaRecorder.state);
 
 		var blob = new Blob(chunks, {type: "video/webm"});	
+		chunks = [];
 
 		var videoURL = window.URL.createObjectURL(blob);
 
@@ -104,8 +106,6 @@ function startRecording(stream) {
 		downloadLink.setAttribute( "download", name);
 		downloadLink.setAttribute( "name", name);
 		
-		
-		chunks = [];
 	};
 
 	mediaRecorder.onpause = function(){
@@ -141,21 +141,23 @@ function onBtnRecordClicked (){
 
 function onBtnStopClicked(){
 	
+	
+	
+	mediaRecorder.stream.getTracks().forEach(function(track){track.stop();}); 
+
+	bufferToDataUrl(function(dataUrl) {
+   		var file = dataUrlToFile(dataUrl);
+    	console.log(file);
+    	//sendVideo(file);
+    	//negotiate(file);
+	});	
 	videoElement.controls = true;
 
 	recBtn.disabled = false;
 	pauseResBtn.disabled = true;
 	stopBtn.disabled = true;
-	
-	//mediaRecorder.stream.getTracks().forEach(function(track){track.stop();}); 
-
-	bufferToDataUrl(function(dataUrl) {
-   		var file = dataUrlToFile(dataUrl);
-    	console.log(file);
-    	sendVideo(file);
-    	//negotiate(file);
-	});	
 	mediaRecorder.stop();
+	
 }
 
 function onPauseResumeClicked(){
