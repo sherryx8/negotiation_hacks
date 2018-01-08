@@ -2,14 +2,11 @@
 
   /*
   Channels
-
   delivery.connect
   file.load
-
   send.start
   send.success
   send.error
-
   receive.start
   receive.success
   receive.error
@@ -44,11 +41,13 @@
   /****        FilePackage    *****/
   /********************************/
   function FilePackage(file,receiving,params){
+
     _this = this;
     this.name = file.name;
     this.size = file.size;
     
     if(receiving){
+      
       this.uid = file.uid;
       this.isText = file.isText;
       this.mimeType = file.mimeType;
@@ -186,5 +185,4 @@
 todo: server
 Receive batch & send batch
 batch should send DataURL prefix
-
 */

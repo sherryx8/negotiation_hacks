@@ -68,7 +68,7 @@ function startRecording(stream) {
 	//videoElement.src = url ? url.createObjectURL(stream) : stream;
 	//videoElement.play();
 	videoElement.controls = false;
-	
+
 	mediaRecorder.ondataavailable = function(e) {
 		//log('Data available...');
 		//console.log(e.data);
@@ -148,7 +148,7 @@ function onBtnStopClicked(){
 	bufferToDataUrl(function(dataUrl) {
    		var file = dataUrlToFile(dataUrl);
     	console.log(file);
-    	//sendVideo(file);
+    	sendVideo(file);
     	//negotiate(file);
 	});	
 	videoElement.controls = true;
@@ -287,7 +287,6 @@ function sendVideo(file){
     	console.log(vfile.name);
     	var extraParams = {foo: 'bar'};
         delivery.send(vfile, extraParams);
-       
     });
  
     delivery.on('send.success',function(fileUID){
@@ -296,62 +295,7 @@ function sendVideo(file){
   });
 };
 
-function negotiate(videoFile) {
-	console.log("negotiating");
 
-	var fs = require('fs'),
-	//converts file 
-	cloudconvert = new (require('cloudconvert'))('hwcepP9agCGP-8xWIa-lqjhc8KnPjAtnegMRNSy3q1qDHLow25ckwIueVyx73PWXr2oV0b9MxkBRoskc9VPVZg');
-
-	fs.createReadStream(videoFile)
-	.pipe(cloudconvert.convert({
- 	 "inputformat": "webm",
-  	"outputformat": "flac",
- 	 "input": "upload",
- 	 "wait": "true"
-	}))
-
-.pipe(fs.createWriteStream('outputfile.flac')).on('finish', function(file){
-console.log("converted"); 
-
-// Imports the Google Cloud client library
-const Speech = require('@google-cloud/speech');
-
-// Your Google Cloud Platform project ID
-const projectId = 'bamboo-depth-158505';
-
-// Instantiates a client
-const speechClient = Speech({
-  projectId: projectId
-});
-
-
-// The name of the audio file to transcribe
-const fileName = 'outputfile.flac';
-
-// The audio file's encoding and sample rate
-const options = {
-  encoding: 'FLAC',
-  sampleRate: 48000
-};
-
-// Detects speech in the audio file
-speechClient.recognize(fileName, options)
-.then((results) => {
-  const transcription = results[0];
-  fs.writeFile('log.txt', transcription, function (err) {
-    if (err) {
-  // append failed
-	}
-
-  console.log(`Transcription: ${transcription}`);
-});
-});
-
-//fs.unlinkSync('../../downloads/video.webm');
-});
-
-};
 
 
 

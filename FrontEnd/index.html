@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -370,15 +370,34 @@ p#data {
 <script>
 
 function loadDoc() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("feedback").innerHTML = this.responseText;
-    }
-  };
-  xhttp.open("GET", "http://localhost:8080", true);
-  xhttp.send();
+
+	console.log("requesting feedback");
+	
+
+  var socket = io.connect('http://localhost:8080', {reconnect: true});
+
+  socket.on('connect', function(){
+  	//console.log("connecting deliv");
+    // var delivery = new Delivery(socket);
+    // delivery.connect();
+
+
+    // delivery.on('receive.success', function(file){
+    //   var params = file;
+    //   console.log('recieved file');
+    //   console.log(file);
+      
+    // });
+  });
+
+  socket.on('heres ur feedback', function(data){
+  	console.log(data);
+  	document.getElementById("feedback").innerHTML = data;
+  	//location.reload();
+  });
+
 }
+//}
 
 
 // setTimeout(function(){ request(); }, 10000);
